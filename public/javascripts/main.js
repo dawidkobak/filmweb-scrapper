@@ -9,13 +9,17 @@ $(document).ready(function(){
         type: "POST",
         data: $('#scrapForm').serializeArray(),
         success: function(result) {
-            $("#result").html(result);
+            let newHtml = '<h3>Dla podanych fraz zescrapowano i zapisano w ElasticSearch następującą liczbę rekordów:</h3>';
+            let jsArray = JSON.parse(result);
+            for (let i = 0; i < jsArray[0].length; i++) {
+                newHtml += '<p>' + jsArray[0][i].phrase + ' -> ' + jsArray[0][i].count + '</p>';
+            }
+            $("#result").html(newHtml);
         },
         error: function(xhr,status,error) {
             $("#result").html(error);
         }
         });
-        $('#scrapForm').reset();
     })
 });
 

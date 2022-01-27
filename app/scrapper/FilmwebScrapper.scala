@@ -7,7 +7,7 @@ import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.Element
 import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{element, elementList}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, JsString, Json}
 import play.api.mvc.{AnyContent, Request}
 
 object FilmwebScrapper {
@@ -23,7 +23,7 @@ object FilmwebScrapper {
     val scrapResult = phrases.map(phrase => phrase -> scrapPhrase(phrase)).toMap
     val allMovies = scrapResult.flatMap(s => s._2)
     allMovies.foreach(ElasticSearchSender.send)
-    Json.toJson(scrapResult.map(r => r._1 -> r._2.length)).toString()
+    Json.arr(scrapResult.map(r => new JsObject(Map("phrase" -> JsString(r._1), "count" -> JsString(r._2.length.toString))))).toString()
   }
 
   def scrapPhrase(phrase: String): Seq[Movie] = {
