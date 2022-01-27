@@ -9,6 +9,8 @@ scalaVersion := "2.13.8"
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
 libraryDependencies += "net.ruippeixotog" %% "scala-scraper" % "2.2.1"
+libraryDependencies += "com.lihaoyi" %% "requests" % "0.7.0"
+libraryDependencies += "org.json4s" %% "json4s-native" % "4.0.3"
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"

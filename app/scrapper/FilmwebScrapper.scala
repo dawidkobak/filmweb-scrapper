@@ -1,5 +1,6 @@
 package scrapper
 
+import elasticsearch.sender.ElasticSearchSender
 import models.Movie
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
@@ -19,8 +20,10 @@ object FilmwebScrapper {
   def doScrapping()(implicit request: Request[AnyContent]): String = {
     val form = request.body.asFormUrlEncoded
     val phrases = form.get("phrase").filter(_.nonEmpty).distinct
-    val result = phrases.map(phrase => phrase -> scrapPhrase(phrase)).toMap
-    Json.toJson(result.map(r => r._1 -> r._2.length)).toString()
+    val scrapResult = phrases.map(phrase => phrase -> scrapPhrase(phrase)).toMap
+    val allMovies = scrapResult.flatMap(s => s._2)
+    allMovies.foreach(ElasticSearchSender.send)
+    Json.toJson(scrapResult.map(r => r._1 -> r._2.length)).toString()
   }
 
   def scrapPhrase(phrase: String): Seq[Movie] = {
