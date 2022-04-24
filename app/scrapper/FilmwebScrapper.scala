@@ -5,14 +5,13 @@ import models.Movie
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
-import net.ruippeixotog.scalascraper.model.Element
 import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{element, elementList}
 import play.api.libs.json.{JsObject, JsString, Json}
 import play.api.mvc.{AnyContent, Request}
 import scrapper.FilmwebScrapper.browser.DocumentType
 
-import scala.concurrent._
 import java.util.concurrent.Executors
+import scala.concurrent._
 import scala.concurrent.duration.Duration.Inf
 
 object FilmwebScrapper {
