@@ -1,7 +1,3 @@
-*.class
-*.log
-.bsp
-.g8
 .idea
+.bsp
 target
-logs

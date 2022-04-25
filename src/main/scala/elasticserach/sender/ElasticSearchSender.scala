@@ -1,6 +1,6 @@
-package elasticsearch.sender
+package elasticserach.sender
 
-import models.Movie
+import model.Movie
 import org.json4s.native.Serialization.write
 import org.json4s.{DefaultFormats, Formats}
 

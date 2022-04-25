@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Filmweb scrapper</title>
+    <link rel="stylesheet" type="text/css" href="assets/main.css">
+
+    <script type="text/javascript" language="javascript" src="assets/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" language="javascript" src="assets/main.js"></script>
+</head>
+<body>
+<div id="container">
+    <form id="scrapForm">
+        <p>Podaj frazy filmów lub seriali do scrap'owania z <a href="https://www.filmweb.pl">Filmweb.pl</a></p>
+        <input type="text" placeholder="fraza" onfocus="this.placeholder=''" onblur="this.placeholder='fraza'" name="phrase">
+
+        <div id="">
+
+        </div>
+        <div id="withIcon">
+            <img src="assets/plus-icon.jpg" height="35" width="35" id="plusIcon" />
+        </div>
+
+        <input type="button" value="Scrap" id="submitButton">
+    </form>
+
+    <div id="result"></div>
+</div>
+
+</body>
+</html>

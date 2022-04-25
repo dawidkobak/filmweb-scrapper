@@ -1,6 +1,6 @@
 package scrapper
 
-import models.Movie
+import model.Movie
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.Element
 import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{attr, element, text, texts}

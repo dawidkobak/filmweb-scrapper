@@ -1,18 +1,16 @@
 package scrapper
 
-import elasticsearch.sender.ElasticSearchSender
-import models.Movie
+import elasticserach.sender.ElasticSearchSender
+import model.Movie
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
-import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.dsl.DSL._
-import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{element, elementList}
-import play.api.libs.json.{JsObject, JsString, Json}
-import play.api.mvc.{AnyContent, Request}
+import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{attr, element, elementList, text}
 import scrapper.FilmwebScrapper.browser.DocumentType
+import ujson.Value
 
 import java.util.concurrent.Executors
-import scala.concurrent._
 import scala.concurrent.duration.Duration.Inf
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 object FilmwebScrapper {
 
@@ -22,14 +20,15 @@ object FilmwebScrapper {
   val serialsEndpoint = "/serials"
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(8))
 
-  def doScrapping()(implicit request: Request[AnyContent]): String = {
-    val form = request.body.asFormUrlEncoded
-    val phrases = form.get("phrase").filter(_.nonEmpty).distinct
+  def doScrapping(request: cask.Request) = {
+    val phrases: Set[String] = request.text.split("&").collect{
+      case s"phrase=$phr" => phr
+    }.toSet
     val scrapFutureResult = phrases.map(phrase => phrase -> scrapPhrase(phrase)).toMap
     val scrapResult = scrapFutureResult.map(r => r._1 -> Await.result(r._2, Inf))
     val allMovies = scrapResult.flatMap(s => s._2)
     allMovies.foreach(ElasticSearchSender.send)
-    Json.arr(scrapResult.map(r => new JsObject(Map("phrase" -> JsString(r._1), "count" -> JsString(r._2.length.toString))))).toString()
+    scrapResult.map(r => ujson.Obj("phrase" -> ujson.Str(r._1), "count" -> ujson.Str(r._2.length.toString)))
   }
 
   def scrapPhrase(phrase: String): Future[Seq[Movie]] = {

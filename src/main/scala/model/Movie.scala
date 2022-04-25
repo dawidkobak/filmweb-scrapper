@@ -1,4 +1,4 @@
-package models
+package model
 
 case class Movie(
   badge: Option[String],

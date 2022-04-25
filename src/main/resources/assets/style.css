@@ -1,7 +1,13 @@
 body
 {
-	background: url(../images/carbon_fibre.png);
+	background: url(/assets/carbon_fibre.png);
 	font-size: 20px;
+}
+
+img
+{
+   height: 35px;
+   width: 35px;
 }
 
 #container
